@@ -6,4 +6,4 @@
 
 Present implementation truth ranks: worktree, Git, deployed runtime, PROJECT_STATE, current architecture docs, historical reports, remembered conversation. Founding truth ranks: commission, FOUNDING_RECORD, PRODUCT_VISION, accepted decisions, ROADMAP.
 
-The next agent should run `npm test && npm run check && npm run build`, load `public/orders.csv`, and compare UI results to `test/engine.test.js`. Update PROJECT_STATE, not founding history, when reality changes. A change drifts if it bypasses validation/deterministic computation, obscures ambiguity/evidence, or builds an unearned later platform surface.
+The next agent should run `npm test && npm run check && npm run build`, load `public/orders.csv`, compare UI results to `test/engine.test.js`, and follow the active dependency sequence in `PROJECT_STATE`. Update PROJECT_STATE, not founding history, when reality changes. A change drifts if it bypasses validation/deterministic computation, obscures ambiguity/evidence, persists unresolved material semantics, or builds an unearned later platform surface.
