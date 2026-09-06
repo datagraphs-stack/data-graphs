@@ -23,3 +23,7 @@
 ## ADR-006 — Comparison ranking is latest-period-first
 
 **Accepted 2026-09-06.** A ranked previous-year comparison first aggregates every year/series pair, selects the latest observed year, ranks series by that year's declared metric with a stable dimension-name tie-break, retains the requested count, and then left-matches those series to the immediately preceding calendar year. A missing or zero baseline yields an explicit unknown percentage; it is never silently treated as zero. The validated plan must declare the ranked dimension, metric, limit, latest-period basis, year dimension, and previous-year offset.
+
+## ADR-007 — Plans reference declared semantics; material intent ambiguity blocks execution
+
+**Accepted 2026-09-06.** A metric operation references a versioned semantic definition that declares its source field, aggregation, time field, null/status policy, unit state, and qualifications. The canonical context declares currency unknown and includes refunded rows while excluding cancelled rows. Intent providers return untrusted `RESOLVED`, `NEEDS_CLARIFICATION`, or `QUALIFIED` interpretations; only interpretations carrying an accepted candidate plan may execute. The deterministic proving adapter is not product AI.
