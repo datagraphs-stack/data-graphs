@@ -1,7 +1,7 @@
 # Deployment origin
 
-No staging deployment exists as of 2026-09-06. No Cloudflare credentials or configured project were present during bootstrap.
+A Cloudflare Pages project named `datagraphs-staging` was created on 2026-09-06. Wrangler accepted a six-file preview deployment for branch `work` at `https://a3ce8e22.datagraphs-staging.pages.dev` with alias `https://work.datagraphs-staging.pages.dev`. There are no runtime bindings.
 
-The build artifact is `dist/` from `npm run build`. Intended direct mechanism (once Wrangler is available): `npx wrangler pages deploy dist --project-name datagraphs-staging --branch <git-branch>`. Required authority is an authenticated Cloudflare account with permission to create/deploy that Pages project; there are no runtime bindings yet. Verify `/`, `/orders.csv`, the canonical calculation, and record deployed URL, UTC time, Git SHA, branch, command, and smoke-test result here. Do not claim a deployment from source alone.
+The artifact was produced by `npm run build` and uploaded with `npx wrangler pages deploy dist --project-name datagraphs-staging --branch work --commit-dirty=true`. This first upload preceded the implementation commit, so it is deployment-mechanism evidence rather than a Git-to-runtime receipt.
 
-**Owner action required:** provide Cloudflare authentication/project authority in the connected environment (or run the command above and return the URL) before staging can exist. DNS for datagraphs.ai is a separate later owner action.
+Runtime verification is not complete: repeated curl requests from this environment returned an upstream 503 for both preview hosts, while the undeployed production host returned Cloudflare's 404. Do not claim the application is reachable until `/`, `/orders.csv`, and the canonical calculation are independently exercised. DNS for datagraphs.ai remains a separate later owner action.
