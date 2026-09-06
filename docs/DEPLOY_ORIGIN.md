@@ -1,7 +1,16 @@
 # Deployment origin
 
-A Cloudflare Pages project named `datagraphs-staging` was created on 2026-09-06. Wrangler accepted a six-file preview deployment for branch `work` at `https://a3ce8e22.datagraphs-staging.pages.dev` with alias `https://work.datagraphs-staging.pages.dev`. There are no runtime bindings.
+A Cloudflare Pages project named `datagraphs-staging` exists with no runtime bindings. The commit-linked preview for branch `work` is `https://5f93f1db.datagraphs-staging.pages.dev`, aliased at `https://work.datagraphs-staging.pages.dev`.
 
-The artifact was produced by `npm run build` and uploaded with `npx wrangler pages deploy dist --project-name datagraphs-staging --branch work --commit-dirty=true`. This first upload preceded the implementation commit, so it is deployment-mechanism evidence rather than a Git-to-runtime receipt.
+## Runtime receipt — 2026-09-06T17:08:16Z
 
-Runtime verification is not complete: repeated curl requests from this environment returned an upstream 503 for both preview hosts, while the undeployed production host returned Cloudflare's 404. Do not claim the application is reachable until `/`, `/orders.csv`, and the canonical calculation are independently exercised. DNS for datagraphs.ai remains a separate later owner action.
+- Git commit: `edf8246f2e443b2d9d45b0c58736254ed75b65c4`
+- Branch: `work`
+- Artifact: `dist/`, produced by `npm run build`
+- Deploy: `npx wrangler pages deploy dist --project-name datagraphs-staging --branch work --commit-hash <Git SHA> --commit-message "Harden deterministic decimal computation"`
+- Wrangler result: six assets present; deployment completed successfully
+- HTTP smoke: `/` returned 200 `text/html`; `/orders.csv` returned 200 `text/csv`
+- Deterministic calculation: canonical exact-value test passed locally against the same source and shipped engine
+- Interactive staging smoke: not run because this environment has no browser executable
+
+This receipt proves Git-linked artifact deployment and HTTP availability, but does not fabricate browser execution evidence. DNS for datagraphs.ai remains a separate later owner action.
