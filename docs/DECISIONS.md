@@ -19,3 +19,7 @@
 ## ADR-005 — Decimal aggregation uses source-derived fixed-point integers
 
 **Accepted 2026-09-06.** Numeric source strings are converted to base-10 integers at the greatest decimal scale present in each result group before sum, minimum, or maximum aggregation. Conversion to a JavaScript number occurs only after the exact integer operation. This removes binary floating-point addition from authoritative totals without prematurely declaring currency semantics for every numeric column. Average divides the exact integer total and remains subject to a future explicit rounding policy.
+
+## ADR-006 — Comparison ranking is latest-period-first
+
+**Accepted 2026-09-06.** A ranked previous-year comparison first aggregates every year/series pair, selects the latest observed year, ranks series by that year's declared metric with a stable dimension-name tie-break, retains the requested count, and then left-matches those series to the immediately preceding calendar year. A missing or zero baseline yields an explicit unknown percentage; it is never silently treated as zero. The validated plan must declare the ranked dimension, metric, limit, latest-period basis, year dimension, and previous-year offset.
