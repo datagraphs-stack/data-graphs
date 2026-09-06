@@ -1,0 +1,11 @@
+order_id,order_date,customer_id,region,product,category,quantity,gross_revenue,discount,net_revenue,status
+O-1001,2024-01-01,C-101,North,Atlas Desk,Furniture,1,500.00,50.00,450.00,completed
+O-1002,2024-01-31,C-102,South,Beacon Lamp,Home,2,200.00,0.00,200.00,completed
+O-1003,2024-01-15,C-103,North,Atlas Desk,Furniture,1,500.00,25.25,474.75,cancelled
+O-1004,2024-02-01,C-101,North,Cedar Chair,Furniture,2,300.00,30.00,270.00,completed
+O-1005,2024-02-29,C-104,West,Delta Mug,Home,4,80.00,0.00,80.00,completed
+O-1006,2024-02-20,C-105,South,Beacon Lamp,Home,1,100.00,100.00,0.00,completed
+O-1007,2024-03-01,C-106,West,Atlas Desk,Furniture,1,500.00,0.00,500.00,refunded
+O-1008,2024-03-31,C-107,North,Delta Mug,Home,3,60.00,10.00,50.00,completed
+O-1008-R,2024-03-31,C-107,North,Delta Mug,Home,3,60.00,10.00,50.00,completed
+O-1009,2024-03-15,C-108,South,Cedar Chair,Furniture,1,150.00,0.00,,completed
