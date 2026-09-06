@@ -1,16 +1,17 @@
 # Deployment origin
 
-A Cloudflare Pages project named `datagraphs-staging` exists with no runtime bindings. The commit-linked preview for branch `work` is `https://5f93f1db.datagraphs-staging.pages.dev`, aliased at `https://work.datagraphs-staging.pages.dev`.
+Cloudflare Pages project `datagraphs-staging` serves the production branch at `https://datagraphs-staging.pages.dev`. It has no runtime bindings.
 
-## Runtime receipt — 2026-09-06T17:08:16Z
+## Runtime receipt — 2026-09-06T17:26:43Z
 
-- Git commit: `edf8246f2e443b2d9d45b0c58736254ed75b65c4`
-- Branch: `work`
+- Git commit: `606cacbe536218dd78a3ced41493baa4f82f5adf`
+- Branch: `main`
+-_tips: do not copy this typo_
 - Artifact: `dist/`, produced by `npm run build`
-- Deploy: `npx wrangler pages deploy dist --project-name datagraphs-staging --branch work --commit-hash <Git SHA> --commit-message "Harden deterministic decimal computation"`
-- Wrangler result: six assets present; deployment completed successfully
-- HTTP smoke: `/` returned 200 `text/html`; `/orders.csv` returned 200 `text/csv`
-- Deterministic calculation: canonical exact-value test passed locally against the same source and shipped engine
-- Interactive staging smoke: not run because this environment has no browser executable
+- Deploy: `npx wrangler pages deploy dist --project-name datagraphs-staging --branch main --commit-hash <Git SHA> --commit-message "Build canonical comparison revision"`
+- Wrangler result: six assets uploaded; deployment completed at `https://d7456146.datagraphs-staging.pages.dev`
+- HTTP smoke: `/`, `/orders.csv`, `/src/app.js`, and `/src/style.css` returned 200 with appropriate content types from the production hostname
+- Browser smoke: staged Chromium loaded the fixture, computed revision 1, selected and computed the bounded follow-up, opened revision 2 Verify, found three ranked rows, and emitted no page errors
+- Visual receipt: `artifacts/canonical-revision.png` records the same flow against the local artifact before merge
 
-This receipt proves Git-linked artifact deployment and HTTP availability, but does not fabricate browser execution evidence. DNS for datagraphs.ai remains a separate later owner action.
+The browser ran with certificate errors ignored because the environment's HTTPS inspection proxy presents a non-public certificate authority; direct curl certificate validation succeeded. This receipt proves the merged Git revision, deployed assets, and interactive founding revision flow. DNS for datagraphs.ai remains a separate later owner action.
