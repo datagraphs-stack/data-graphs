@@ -2,7 +2,17 @@
 
 Cloudflare Pages project `datagraphs-staging` serves the production branch at `https://datagraphs-staging.pages.dev`. It has no runtime bindings.
 
-## Runtime receipt — 2026-09-06T17:26:43Z
+
+## Runtime receipt — 2026-09-06T17:56:13Z
+
+- Git commit: `246fcc209e4136b748cb5303bcf57341990ee252`
+- Branch: `main`
+- Deploy: `npx wrangler pages deploy dist --project-name datagraphs-staging --branch main --commit-hash <Git SHA> --commit-message "Make canonical semantics and ambiguity explicit"`
+- Wrangler result: eight assets present; deployment completed at `https://1a2c760a.datagraphs-staging.pages.dev`
+- HTTP smoke: `/`, `/orders.csv`, `/src/intent.js`, and `/src/semantics.js` returned 200
+- Browser smoke: ambiguous follow-up did not alter the authoritative result; three choices rendered; confirmed annual-total interpretation executed; unknown currency and refunded-row policy appeared in Verify; no page errors
+
+## Prior runtime receipt — 2026-09-06T17:26:43Z
 
 - Git commit: `606cacbe536218dd78a3ced41493baa4f82f5adf`
 - Branch: `main`
