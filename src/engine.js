@@ -1,6 +1,12 @@
 /** @typedef {'string'|'number'|'date'|'boolean'|'unknown'} ColumnType */
 /** @typedef {{field:string,operator:'eq'|'neq',value:string}} Filter */
-/** @typedef {{source:string,filters:Filter[],dimensions:{field:string,bucket?:'month'}[],metrics:{field:string,aggregation:'sum'|'count'|'average'|'min'|'max'}[],sort?:{field:string,direction:'asc'|'desc'}[],limit?:number,visualization:{type:'line'|'bar'|'table'}} AnalysisPlan */
+/** @typedef {{version:1,source:string,filters:Filter[],dimensions:{field:string,bucket?:'month'}[],metrics:{field:string,aggregation:'sum'|'count'|'average'|'min'|'max'}[],sort?:{field:string,direction:'asc'|'desc'}[],limit?:number,visualization:{type:'line'|'bar'|'table'}} AnalysisPlan */
+
+const aggregations=new Set(['sum','count','average','min','max']);
+const filterOperators=new Set(['eq','neq']);
+const visualizationTypes=new Set(['line','bar','table']);
+const isoDate=/^\d{4}-(0[1-9]|1[0-2])-([0-2]\d|3[01])(?:T.*)?$/;
+const strictNumber=/^-?(?:\d+|\d*\.\d+)$/;
 
 export function parseCsv(text) {
   const rows=[]; let row=[], field='', quote=false;
@@ -9,9 +15,40 @@ export function parseCsv(text) {
   const headers=rows[0].map(x=>x.trim()); if(new Set(headers).size!==headers.length||headers.some(x=>!x)) throw new Error('CSV headers must be non-empty and unique.');
   return rows.slice(1).map((values,i)=>{if(values.length!==headers.length)throw new Error(`Row ${i+2} has ${values.length} values; expected ${headers.length}.`);return Object.fromEntries(headers.map((h,j)=>[h,values[j]]));});
 }
-const isoDate=/^\d{4}-(0[1-9]|1[0-2])-([0-2]\d|3[01])(?:T.*)?$/;
-export function inferType(name, values){const nonNull=values.filter(v=>v.trim()!==''); if(!nonNull.length)return 'unknown'; if(/(^|_)id$/i.test(name))return 'string'; if(nonNull.every(v=>/^(true|false)$/i.test(v)))return 'boolean'; if(nonNull.every(v=>isoDate.test(v)&&!Number.isNaN(Date.parse(v))))return 'date'; if(nonNull.every(v=>/^-?(?:\d+|\d*\.\d+)$/.test(v)&&Number.isFinite(Number(v))))return 'number'; return 'string';}
+
+export function inferType(name, values){const nonNull=values.filter(v=>v.trim()!==''); if(!nonNull.length)return 'unknown'; if(/(^|_)id$/i.test(name))return 'string'; if(nonNull.every(v=>/^(true|false)$/i.test(v)))return 'boolean'; if(nonNull.every(v=>isoDate.test(v)&&!Number.isNaN(Date.parse(v))))return 'date'; if(nonNull.every(v=>strictNumber.test(v)&&Number.isFinite(Number(v))))return 'number'; return 'string';}
 export function profileDataset(rows){const columns=Object.keys(rows[0]||{}).map(name=>{const values=rows.map(r=>r[name]??''), type=inferType(name,values), nonNull=values.filter(v=>v.trim()!==''); const out={name,type,nullCount:values.length-nonNull.length,uniqueCount:new Set(nonNull).size,samples:[...new Set(nonNull)].slice(0,3)}; if(type==='number')Object.assign(out,{min:Math.min(...nonNull.map(Number)),max:Math.max(...nonNull.map(Number))}); if(type==='date')Object.assign(out,{min:[...nonNull].sort()[0],max:[...nonNull].sort().at(-1)}); return out;}); return {rowCount:rows.length,columns,warnings:columns.filter(c=>c.nullCount>0).map(c=>`${c.name} contains ${c.nullCount} blank value(s).`)};}
-export function validatePlan(plan, profile){const errors=[]; if(plan.source!=='orders')errors.push(`Unknown source: ${plan.source}`); const types=Object.fromEntries(profile.columns.map(c=>[c.name,c.type])); for(const item of [...plan.filters,...plan.dimensions,...plan.metrics])if(!(item.field in types))errors.push(`Unknown field: ${item.field}`); for(const m of plan.metrics)if(m.aggregation!=='count'&&types[m.field]!=='number')errors.push(`${m.aggregation} requires a numeric field: ${m.field}`); for(const d of plan.dimensions)if(d.bucket&&types[d.field]!=='date')errors.push(`Date bucketing requires a date field: ${d.field}`); return {valid:errors.length===0,errors};}
+
+function isRecord(value){return value!==null&&typeof value==='object'&&!Array.isArray(value);}
+function outputFields(plan){return new Set([...(plan.dimensions||[]).map(d=>d.bucket?`${d.field}_${d.bucket}`:d.field),...(plan.metrics||[]).map(m=>`${m.aggregation}_${m.field}`)]);}
+export function validatePlan(plan,profile){
+  const errors=[];
+  if(!isRecord(plan))return {valid:false,errors:['Plan must be an object.']};
+  if(plan.version!==1)errors.push(`Unsupported plan version: ${String(plan.version)}`);
+  if(plan.source!=='orders')errors.push(`Unknown source: ${String(plan.source)}`);
+  for(const key of ['filters','dimensions','metrics'])if(!Array.isArray(plan[key]))errors.push(`${key} must be an array.`);
+  if(!isRecord(plan.visualization)||!visualizationTypes.has(plan.visualization?.type))errors.push('visualization.type must be line, bar, or table.');
+  if(plan.sort!==undefined&&!Array.isArray(plan.sort))errors.push('sort must be an array when provided.');
+  if(plan.limit!==undefined&&(!Number.isSafeInteger(plan.limit)||plan.limit<1))errors.push('limit must be a positive safe integer.');
+  const filters=Array.isArray(plan.filters)?plan.filters:[], dimensions=Array.isArray(plan.dimensions)?plan.dimensions:[], metrics=Array.isArray(plan.metrics)?plan.metrics:[], sort=Array.isArray(plan.sort)?plan.sort:[];
+  if(!dimensions.length)errors.push('At least one dimension is required.');
+  if(!metrics.length)errors.push('At least one metric is required.');
+  const types=Object.fromEntries((profile?.columns||[]).map(c=>[c.name,c.type]));
+  for(const f of filters){if(!isRecord(f)||typeof f.field!=='string'){errors.push('Each filter requires a field.');continue;}if(!(f.field in types))errors.push(`Unknown field: ${f.field}`);if(!filterOperators.has(f.operator))errors.push(`Unsupported filter operator: ${String(f.operator)}`);if(typeof f.value!=='string')errors.push(`Filter value must be a source string: ${f.field}`);}
+  for(const d of dimensions){if(!isRecord(d)||typeof d.field!=='string'){errors.push('Each dimension requires a field.');continue;}if(!(d.field in types))errors.push(`Unknown field: ${d.field}`);if(d.bucket!==undefined&&d.bucket!=='month')errors.push(`Unsupported date bucket: ${String(d.bucket)}`);if(d.bucket&&types[d.field]!=='date')errors.push(`Date bucketing requires a date field: ${d.field}`);}
+  for(const m of metrics){if(!isRecord(m)||typeof m.field!=='string'){errors.push('Each metric requires a field.');continue;}if(!(m.field in types))errors.push(`Unknown field: ${m.field}`);if(!aggregations.has(m.aggregation))errors.push(`Unsupported aggregation: ${String(m.aggregation)}`);else if(m.aggregation!=='count'&&types[m.field]!=='number')errors.push(`${m.aggregation} requires a numeric field: ${m.field}`);}
+  const outputs=outputFields({dimensions,metrics});
+  for(const s of sort){if(!isRecord(s)||typeof s.field!=='string'){errors.push('Each sort requires a field.');continue;}if(!outputs.has(s.field))errors.push(`Sort field is not in result: ${s.field}`);if(s.direction!=='asc'&&s.direction!=='desc')errors.push(`Unsupported sort direction: ${String(s.direction)}`);}
+  return {valid:errors.length===0,errors:[...new Set(errors)]};
+}
+
 function dimensionValue(row,d){const value=row[d.field]; return d.bucket==='month'?value.slice(0,7):value;}
-export function executePlan(rows,plan,profile){const validation=validatePlan(plan,profile);if(!validation.valid)throw new Error(validation.errors.join(' ')); const filtered=rows.filter(r=>plan.filters.every(f=>f.operator==='eq'?r[f.field]===f.value:r[f.field]!==f.value)); const groups=new Map(); for(const row of filtered){const dims=plan.dimensions.map(d=>dimensionValue(row,d));const key=JSON.stringify(dims);if(!groups.has(key))groups.set(key,{dims,rows:[]});groups.get(key).rows.push(row);} let result=[...groups.values()].map(g=>{const out=Object.fromEntries(plan.dimensions.map((d,i)=>[d.bucket?`${d.field}_${d.bucket}`:d.field,g.dims[i]]));for(const m of plan.metrics){const vals=g.rows.map(r=>Number(r[m.field])).filter(Number.isFinite);const key=`${m.aggregation}_${m.field}`;out[key]=m.aggregation==='count'?g.rows.length:m.aggregation==='sum'?vals.reduce((a,b)=>a+b,0):m.aggregation==='average'?(vals.reduce((a,b)=>a+b,0)/vals.length):m.aggregation==='min'?Math.min(...vals):Math.max(...vals);}return out;}); for(const s of [...(plan.sort||[])].reverse())result.sort((a,b)=>(a[s.field]>b[s.field]?1:a[s.field]<b[s.field]?-1:0)*(s.direction==='asc'?1:-1));if(plan.limit)result=result.slice(0,plan.limit);return {rows:result,evidence:{source:plan.source,sourceRows:rows.length,filteredRows:filtered.length,resultRows:result.length,columnsUsed:[...new Set([...plan.filters,...plan.dimensions,...plan.metrics].map(x=>x.field))],plan,engineVersion:'0.1.0',warnings:profile.warnings}};}
+function decimalParts(value){const [whole,fraction='']=value.split('.');return {scale:fraction.length,integer:BigInt(whole+fraction)};}
+function aggregateDecimal(values,aggregation){
+  const parsed=values.map(decimalParts), scale=Math.max(0,...parsed.map(v=>v.scale));
+  const integers=parsed.map(v=>v.integer*10n**BigInt(scale-v.scale));
+  const selected=aggregation==='min'?integers.reduce((a,b)=>a<b?a:b):aggregation==='max'?integers.reduce((a,b)=>a>b?a:b):integers.reduce((a,b)=>a+b,0n);
+  if(aggregation==='average')return Number(selected)/values.length/10**scale;
+  return Number(selected)/10**scale;
+}
+export function executePlan(rows,plan,profile){const validation=validatePlan(plan,profile);if(!validation.valid)throw new Error(validation.errors.join(' ')); const filtered=rows.filter(r=>plan.filters.every(f=>f.operator==='eq'?r[f.field]===f.value:r[f.field]!==f.value)); const groups=new Map(); for(const row of filtered){const dims=plan.dimensions.map(d=>dimensionValue(row,d));const key=JSON.stringify(dims);if(!groups.has(key))groups.set(key,{dims,rows:[]});groups.get(key).rows.push(row);} let result=[...groups.values()].map(g=>{const out=Object.fromEntries(plan.dimensions.map((d,i)=>[d.bucket?`${d.field}_${d.bucket}`:d.field,g.dims[i]]));for(const m of plan.metrics){const vals=g.rows.map(r=>r[m.field]).filter(v=>strictNumber.test(v));const key=`${m.aggregation}_${m.field}`;out[key]=m.aggregation==='count'?g.rows.length:vals.length?aggregateDecimal(vals,m.aggregation):null;}return out;}); for(const s of [...(plan.sort||[])].reverse())result.sort((a,b)=>(a[s.field]>b[s.field]?1:a[s.field]<b[s.field]?-1:0)*(s.direction==='asc'?1:-1));if(plan.limit)result=result.slice(0,plan.limit);return {rows:result,evidence:{source:plan.source,sourceRows:rows.length,filteredRows:filtered.length,resultRows:result.length,columnsUsed:[...new Set([...plan.filters,...plan.dimensions,...plan.metrics].map(x=>x.field))],plan:structuredClone(plan),engineVersion:'0.2.0',arithmetic:'base-10 fixed-point aggregation; decimal scale derived per group',warnings:profile.warnings}};}

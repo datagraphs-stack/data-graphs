@@ -1,7 +1,16 @@
 # Deployment origin
 
-No staging deployment exists as of 2026-09-06. No Cloudflare credentials or configured project were present during bootstrap.
+A Cloudflare Pages project named `datagraphs-staging` exists with no runtime bindings. The commit-linked preview for branch `work` is `https://5f93f1db.datagraphs-staging.pages.dev`, aliased at `https://work.datagraphs-staging.pages.dev`.
 
-The build artifact is `dist/` from `npm run build`. Intended direct mechanism (once Wrangler is available): `npx wrangler pages deploy dist --project-name datagraphs-staging --branch <git-branch>`. Required authority is an authenticated Cloudflare account with permission to create/deploy that Pages project; there are no runtime bindings yet. Verify `/`, `/orders.csv`, the canonical calculation, and record deployed URL, UTC time, Git SHA, branch, command, and smoke-test result here. Do not claim a deployment from source alone.
+## Runtime receipt — 2026-09-06T17:08:16Z
 
-**Owner action required:** provide Cloudflare authentication/project authority in the connected environment (or run the command above and return the URL) before staging can exist. DNS for datagraphs.ai is a separate later owner action.
+- Git commit: `edf8246f2e443b2d9d45b0c58736254ed75b65c4`
+- Branch: `work`
+- Artifact: `dist/`, produced by `npm run build`
+- Deploy: `npx wrangler pages deploy dist --project-name datagraphs-staging --branch work --commit-hash <Git SHA> --commit-message "Harden deterministic decimal computation"`
+- Wrangler result: six assets present; deployment completed successfully
+- HTTP smoke: `/` returned 200 `text/html`; `/orders.csv` returned 200 `text/csv`
+- Deterministic calculation: canonical exact-value test passed locally against the same source and shipped engine
+- Interactive staging smoke: not run because this environment has no browser executable
+
+This receipt proves Git-linked artifact deployment and HTTP availability, but does not fabricate browser execution evidence. DNS for datagraphs.ai remains a separate later owner action.

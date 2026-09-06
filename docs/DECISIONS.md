@@ -14,4 +14,8 @@
 
 ## ADR-004 — Current money arithmetic is provisional
 
-**Accepted 2026-09-06.** The proof uses JavaScript numbers and exact two-decimal fixture inputs. Before accepting arbitrary currency computation, use a decimal/fixed-minor-unit policy and test rounding. The current limitation must remain visible in project state.
+**Superseded by ADR-005 on 2026-09-06.** The initial proof used JavaScript number addition and exact two-decimal fixture inputs.
+
+## ADR-005 — Decimal aggregation uses source-derived fixed-point integers
+
+**Accepted 2026-09-06.** Numeric source strings are converted to base-10 integers at the greatest decimal scale present in each result group before sum, minimum, or maximum aggregation. Conversion to a JavaScript number occurs only after the exact integer operation. This removes binary floating-point addition from authoritative totals without prematurely declaring currency semantics for every numeric column. Average divides the exact integer total and remains subject to a future explicit rounding policy.
