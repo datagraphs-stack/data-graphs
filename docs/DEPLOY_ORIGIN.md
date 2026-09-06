@@ -6,7 +6,6 @@ Cloudflare Pages project `datagraphs-staging` serves the production branch at `h
 
 - Git commit: `606cacbe536218dd78a3ced41493baa4f82f5adf`
 - Branch: `main`
--_tips: do not copy this typo_
 - Artifact: `dist/`, produced by `npm run build`
 - Deploy: `npx wrangler pages deploy dist --project-name datagraphs-staging --branch main --commit-hash <Git SHA> --commit-message "Build canonical comparison revision"`
 - Wrangler result: six assets uploaded; deployment completed at `https://d7456146.datagraphs-staging.pages.dev`
