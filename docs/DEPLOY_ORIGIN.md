@@ -1,6 +1,19 @@
 # Deployment origin
 
-Cloudflare Pages project `datagraphs-staging` serves the production branch at `https://datagraphs-staging.pages.dev`. It has no runtime bindings.
+Cloudflare Pages project `datagraphs-staging` serves the production branch at `https://datagraphs-staging.pages.dev`. Its `DB` binding targets the `datagraphs-staging` D1 database. Apply migrations with `npx wrangler d1 migrations apply datagraphs-staging --remote` before deploying code that depends on a new migration.
+
+## Runtime receipt — 2026-09-07T02:02Z
+
+- Git commit: `1f3f19f` (merged PR #14, following persistence PR #13 at `72508c8`)
+- Branch: `main`
+- Deploy: `npx wrangler pages deploy dist --project-name datagraphs-staging --branch main --commit-hash <Git SHA> --commit-dirty=false`
+- Wrangler result: static assets and the Pages Functions bundle deployed at `https://8d191ac4.datagraphs-staging.pages.dev`
+- HTTP smoke: the production hostname returned 200 and the expected DataGraphs shell
+- Browser/API proof: Chromium created revision 1 through `POST`, appended revision 2 through authenticated `PUT`, closed the creator context, and reopened the stable route in a fresh browser context
+- Identity proof: source and latest-result identities matched before and after reload; the shared context had no creator token and rendered read-only
+- Historical proof: reload displayed `STORED HISTORICAL RESULT`; it did not silently recompute; no browser page errors occurred
+- Durable proving route: `https://datagraphs-staging.pages.dev/g/dg_c96a717a-381f-43e6-8b0b-4d55b0a07cd5`
+- Deployment correction: the first post-PR #13 publish failed because the generated Functions bundle required `node:stream`; PR #14 added the explicit Pages `nodejs_compat` runtime flag, after which the exact merged revision deployed and passed the workflow
 
 
 
