@@ -3,7 +3,17 @@
 Cloudflare Pages project `datagraphs-staging` serves the production branch at `https://datagraphs-staging.pages.dev`. It has no runtime bindings.
 
 
-## Runtime receipt — 2026-09-06T17:56:13Z
+
+## Runtime receipt — 2026-09-07T00:56:31Z
+
+- Git commit: `1bf54cc5db75a5b5da7c4dce7b56728f63d03ca2`
+- Branch: `main`
+- Deploy: `npx wrangler pages deploy dist --project-name datagraphs-staging --branch main --commit-hash <Git SHA> --commit-message "Derive Verify from deterministic execution trace"`
+- Wrangler result: nine assets present; deployment completed at `https://9c51ddba.datagraphs-staging.pages.dev`
+- HTTP smoke: `/` and `/src/trace.js` returned 200
+- Browser smoke: four canonical trace operations; no trace while intent was unresolved; five clarified comparison operations with actual 2024/2023 periods; no page errors
+
+## Prior runtime receipt — 2026-09-06T17:56:13Z
 
 - Git commit: `246fcc209e4136b748cb5303bcf57341990ee252`
 - Branch: `main`

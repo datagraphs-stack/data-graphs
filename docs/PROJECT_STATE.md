@@ -10,12 +10,12 @@ There is no AI integration, durable persistence/share URL, source hash, cross-se
 
 This work is `advancing_core`: it proves SOURCE → basic COMPUTATION → EVIDENCE → PRESENTATION locally. It does not prove the full loop.
 
-Active dependency sequence: (1) semantic and ambiguity correction **complete for the canonical context**; (2) execution-derived evidence trace **complete locally; staging pending this merge**; (3) DataGraph envelope and identities **next**; (4) persistence/reload/share; (5) bounded AI intent proposal; (6) complete stranger/browser founding proof. The next slice defines a serializable DataGraph and deterministic source/result/revision identities before any persistence work.
+Active dependency sequence: (1) semantic and ambiguity correction **complete for the canonical context**; (2) execution-derived evidence trace **complete and staging-verified**; (3) DataGraph envelope and identities **next**; (4) persistence/reload/share; (5) bounded AI intent proposal; (6) complete stranger/browser founding proof. The next slice defines a serializable DataGraph and deterministic source/result/revision identities before any persistence work.
 
 ## Runtime verification status
 
 - **local browser:** Chromium loaded the fixture, computed revision 1, selected the bounded follow-up, computed revision 2, opened Verify, found three ranked rows, and emitted no page errors.
-- **staging:** merged commit `246fcc2` is deployed; HTTP checks passed for the shell, fixture, intent provider, and semantic context, and Chromium proved clarification blocks execution until confirmation before completing revision 2 with visible semantics and no page errors.
+- **staging:** merged commit `1bf54cc` is deployed; HTTP served trace version 1, and Chromium verified four canonical operations, no trace for unresolved ambiguity, five comparison operations after clarification, actual 2024/2023 periods, and no page errors.
 - **discovered and corrected:** the static app previously imported CSS as a JavaScript module, which native browsers reject. The stylesheet is now loaded from `index.html`; the browser smoke is the first direct evidence that the runnable shell executes rather than merely builds.
 
 GitHub repository access and Cloudflare account/project authority were verified without exposing credential values. Portfolio HQ was not modified. Git history plus this state file provide reconstruction evidence.
