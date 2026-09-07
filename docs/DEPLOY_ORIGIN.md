@@ -2,6 +2,20 @@
 
 Cloudflare Pages project `datagraphs-staging` serves the production branch at `https://datagraphs-staging.pages.dev`. Its `DB` binding targets the `datagraphs-staging` D1 database. Apply migrations with `npx wrangler d1 migrations apply datagraphs-staging --remote` before deploying code that depends on a new migration.
 
+## External-hardening runtime receipt — 2026-09-07T03:03Z
+
+- Git commit: `41ede26` (merged PR #19)
+- Branch: `main`
+- Deploy: `npx wrangler pages deploy dist --project-name datagraphs-staging --branch main --commit-hash <Git SHA> --commit-dirty=false`
+- Wrangler result: exact merged release deployed at `https://964e20e7.datagraphs-staging.pages.dev`
+- Compatibility proof: an incompatible CSV missing `net_revenue` displayed the concrete issue and left computation disabled
+- Intent recovery proof: an intercepted HTTP 429 displayed `INTENT UNAVAILABLE`, produced no authoritative result, and caused no page error
+- Publication proof: opening the publication review made no persistence request; confirmation began disabled; only checking the exact-source/public-link acknowledgment enabled a successful create
+- Lost-key proof: a fresh browser context loaded the resulting stable route and explicitly reported read-only status because no creator key existed in that browser
+- Browser outcome: no page errors
+- Durable hardening proof: `https://datagraphs-staging.pages.dev/g/dg_45d917a0-5eff-4ce7-8c36-970f473e7d81`
+- Remaining evidence boundary: automated fresh-context testing is not an independent human usability session
+
 ## Founding-proof runtime receipt — 2026-09-07T02:40Z
 
 - Git commit: `fcadb4a` (merged PR #16)
