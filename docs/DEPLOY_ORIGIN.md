@@ -1,6 +1,8 @@
 # Deployment origin
 
-Cloudflare Pages project `datagraphs-staging` serves the production branch at `https://datagraphs-staging.pages.dev`. Its `DB` binding targets the `datagraphs-staging` D1 database. Apply migrations with `npx wrangler d1 migrations apply datagraphs-staging --remote` before deploying code that depends on a new migration.
+Cloudflare Pages project `datagraphs-staging` serves the staging application at `https://staging.datagraphs.ai` (and its fallback `https://datagraphs-staging.pages.dev`). Its `DB` binding targets the `datagraphs-staging` D1 database. Staging operations must pass `--config wrangler.staging.jsonc` where Wrangler supports custom configuration (including D1 migrations).
+
+Cloudflare Pages project `datagraphs` serves production at `https://datagraphs.ai` and `https://app.datagraphs.ai` (with fallback `https://datagraphs.pages.dev`). Its `DB` binding targets the isolated `datagraphs-production` D1 database. The root `wrangler.jsonc` is the production deployment configuration; apply migrations with `npx wrangler d1 migrations apply datagraphs-production --remote` before deploying dependent code. The apex and `app` hostnames intentionally serve the same production deployment; no canonical-host redirect is asserted yet.
 
 ## External-hardening runtime receipt — 2026-09-07T03:03Z
 
@@ -88,3 +90,15 @@ Cloudflare Pages project `datagraphs-staging` serves the production branch at `h
 - Visual receipt: `artifacts/canonical-revision.png` records the same flow against the local artifact before merge
 
 The browser ran with certificate errors ignored because the environment's HTTPS inspection proxy presents a non-public certificate authority; direct curl certificate validation succeeded. This receipt proves the merged Git revision, deployed assets, and interactive founding revision flow. DNS for datagraphs.ai remains a separate later owner action.
+
+## Custom-domain and production isolation receipt — 2026-09-07T03:37Z
+
+- Git commit deployed to the production project: `a040b70be277665720d6c58850e948619068656d`
+- Production deployment: `https://2de9566f.datagraphs.pages.dev`
+- Staging mapping: `staging.datagraphs.ai` → `datagraphs-staging` Pages project → `datagraphs-staging` D1 database
+- Production mappings: `datagraphs.ai` and `app.datagraphs.ai` → `datagraphs` Pages project → `datagraphs-production` D1 database
+- Database initialization: both repository migrations applied successfully to the isolated production database before deployment
+- Cloudflare status: all three custom domains reached active verification and certificate validation
+- HTTP smoke: all three custom HTTPS origins returned `200` with the DataGraphs shell
+- Functions smoke: a missing DataGraph request on each origin reached the API and returned the expected structured `404`
+- Boundary: this receipt proves domain routing, deployment, and environment isolation; it does not turn public-link storage into private sharing or supply independent-human usability evidence
