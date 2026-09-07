@@ -4,6 +4,16 @@ Cloudflare Pages project `datagraphs-staging` serves the staging application at 
 
 Cloudflare Pages project `datagraphs` serves production at `https://datagraphs.ai` and `https://app.datagraphs.ai` (with fallback `https://datagraphs.pages.dev`). Its `DB` binding targets the isolated `datagraphs-production` D1 database. The root `wrangler.jsonc` is the production deployment configuration; apply migrations with `npx wrangler d1 migrations apply datagraphs-production --remote` before deploying dependent code. The apex and `app` hostnames intentionally serve the same production deployment; no canonical-host redirect is asserted yet.
 
+## Merged production and staging release — 2026-09-07T04:03Z
+
+- Git commit: `7ba7604` (merged PR #21; no other pull requests were open)
+- Production deploy: `https://6cde5014.datagraphs.pages.dev`, served through `https://datagraphs.ai` and `https://app.datagraphs.ai`
+- Staging deploy: `https://cf454e3b.datagraphs-staging.pages.dev`, served through `https://staging.datagraphs.ai`
+- Database state: both production and staging D1 migration checks reported no pending migrations
+- HTTP smoke: all three custom domains and both immutable deployment URLs returned HTTP 200 with the DataGraphs shell
+- API smoke: both custom-domain APIs reached the Functions/D1 boundary and returned the expected JSON 404 for a valid but absent DataGraph identity
+- Browser smoke: headless Chromium rendered the production frontend successfully; `artifacts/production-front-end.png` is the visual receipt
+
 ## External-hardening runtime receipt — 2026-09-07T03:03Z
 
 - Git commit: `41ede26` (merged PR #19)
