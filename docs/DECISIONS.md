@@ -43,3 +43,7 @@
 ## ADR-011 — Models propose bounded intent slots; deterministic code compiles plans
 
 **Accepted 2026-09-07.** Workers AI receives the question, conservative structure, declared semantics, and prior revision context, but no source rows. It proposes a small versioned set of analytical intent slots and never results, SQL, or code. Deterministic code rejects extra fields, compiles supported slots into an AnalysisPlan, performs structural and semantic validation, and blocks material comparison-grain ambiguity before execution. Provider/model/prompt metadata and the proposal are provenance. Provider errors fail closed. A D1-backed global hourly staging budget limits inference spend without pretending to be production authentication or per-user abuse control.
+
+## ADR-012 — Compatibility and publication boundaries must be explicit
+
+**Accepted 2026-09-07.** The canonical proof must not imply arbitrary CSV compatibility. Deterministic preflight requires the declared metric time, value, status, and grouping fields with conservative inferred types before intent can run; missing or incompatible structure is shown and computation remains disabled. Publishing is a separate act from local analysis: the first server save requires an explicit acknowledgment that the exact CSV and DataGraph become accessible to anyone holding the unlisted URL. A browser without the creator token is explicitly read-only rather than implying recoverable ownership.

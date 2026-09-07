@@ -4,10 +4,11 @@ import {createModelIntentProvider,InterpretationStatus,resolveClarification} fro
 import {appendRevision,createDataGraph} from './datagraph.js';
 import {base64ToBytes} from './identity.js';
 import {deserializeDataGraph,validateDataGraph} from './datagraph.js';
+import {assessDatasetCompatibility} from './compatibility.js';
 
 const app=document.querySelector('#app');
 const intentProvider=createModelIntentProvider();
-let state={sourceBytes:null,rows:[],profile:null,result:null,name:'',dataGraph:null,revisions:[],pendingInterpretation:null,persistedRevisionCount:0,writeToken:null,loadedFromStorage:false};
+let state={sourceBytes:null,rows:[],profile:null,compatibility:null,result:null,name:'',dataGraph:null,revisions:[],pendingInterpretation:null,persistedRevisionCount:0,writeToken:null,loadedFromStorage:false};
 app.innerHTML=`<header><a class="brand">DATAGRAPHS<span>.AI</span></a><div class="thesis">Trusted computation, from source to decision.</div><button id="loadSample" class="quiet">Load proving dataset</button></header><main><aside><div class="eyebrow">SOURCE</div><h2>Dataset</h2><label class="upload"><strong>Upload CSV</strong><span>Source stays in this browser unless you explicitly save a public link.</span><input id="file" type="file" accept=".csv,text/csv"></label><div id="dataset" class="empty">No dataset loaded.</div></aside><section><div class="eyebrow">DATAGRAPH / RESULT</div><div id="hero"><div class="emptyHero"><h1>Answers you can inspect.</h1><p>Load the canonical orders dataset or upload a CSV to begin.</p></div></div></section><aside class="right"><div class="eyebrow">INTENT</div><h2>Ask the data</h2><textarea id="question" rows="4">Show monthly net revenue by region, excluding cancelled orders.</textarea><button id="run" disabled>Compute answer</button><p class="boundary">AI proposes a constrained plan. Validation and ambiguity checks gate it. Only the deterministic engine computes values.</p><div id="verify"></div></aside></main>`;
 
 const $=selector=>document.querySelector(selector);
@@ -18,14 +19,16 @@ function deepFreeze(value){if(value&&typeof value==='object'){Object.freeze(valu
 function load(sourceBytes,name){
   try{
     const text=new TextDecoder('utf-8',{fatal:true}).decode(sourceBytes);
-    const rows=parseCsv(text),profile=profileDataset(rows);
-    state={sourceBytes:new Uint8Array(sourceBytes),rows,profile,result:null,name,dataGraph:null,revisions:[],pendingInterpretation:null,persistedRevisionCount:0,writeToken:null,loadedFromStorage:false};
-    $('#run').disabled=false;
-    $('#dataset').innerHTML=`<div class="datasetName">${esc(name)}</div><div class="stat"><b>${profile.rowCount}</b> rows · <b>${profile.columns.length}</b> columns</div><div class="schema">${profile.columns.map(column=>`<div><span>${esc(column.name)}</span><em>${column.type}</em><small>${column.uniqueCount} unique${column.nullCount?` · ${column.nullCount} blank`:''}</small></div>`).join('')}</div>`;
-    $('#hero').innerHTML=`<div class="emptyHero"><h1>Dataset ready.</h1><p>Review inferred structure, then compute the canonical question.</p></div>`;
+    const rows=parseCsv(text),profile=profileDataset(rows),compatibility=assessDatasetCompatibility(profile,canonicalSemantics);
+    state={sourceBytes:new Uint8Array(sourceBytes),rows,profile,compatibility,result:null,name,dataGraph:null,revisions:[],pendingInterpretation:null,persistedRevisionCount:0,writeToken:null,loadedFromStorage:false};
+    $('#run').disabled=!compatibility.compatible;
+    $('#dataset').innerHTML=`<div class="datasetName">${esc(name)}</div><div class="stat"><b>${profile.rowCount}</b> rows · <b>${profile.columns.length}</b> columns</div>${compatibilityPanel(compatibility)}<div class="schema">${profile.columns.map(column=>`<div><span>${esc(column.name)}</span><em>${column.type}</em><small>${column.uniqueCount} unique${column.nullCount?` · ${column.nullCount} blank`:''}</small></div>`).join('')}</div>`;
+    $('#hero').innerHTML=compatibility.compatible?`<div class="emptyHero"><h1>Dataset ready.</h1><p>Review inferred structure, then compute the canonical question.</p></div>`:`<div class="emptyHero incompatible"><h1>Dataset not compatible yet.</h1><p>This narrow proof will not guess mappings or semantics. Correct the listed columns and upload again.</p></div>`;
     $('#verify').innerHTML='';
   }catch(error){alert(error.message);}
 }
+
+function compatibilityPanel(compatibility){return compatibility.compatible?`<div class="compatibility compatible"><strong>Compatible with the commerce proof</strong><span>Monthly net revenue by region using declared status policy.</span></div>`:`<div class="compatibility incompatible"><strong>Not compatible with this proof</strong><ul>${compatibility.issues.map(issue=>`<li>${esc(issue)}</li>`).join('')}</ul></div>`;}
 
 $('#file').addEventListener('change',async event=>{const file=event.target.files[0];if(file)load(new Uint8Array(await file.arrayBuffer()),file.name);});
 $('#loadSample').addEventListener('click',async()=>load(new Uint8Array(await (await fetch('/orders.csv')).arrayBuffer()),'orders.csv'));
@@ -46,7 +49,8 @@ async function executeInterpretation(interpretation){
 
 function renderClarification(interpretation){
   const ambiguity=interpretation.ambiguities[0];
-  $('#verify').innerHTML=`<div class="clarification"><div class="eyebrow">NEEDS CLARIFICATION</div><h2>${esc(ambiguity.prompt)}</h2><p>No calculation ran. ${ambiguity.choices.length?'Choose an interpretation before DataGraphs creates the next plan.':'Revise the question and try again.'}</p>${ambiguity.choices.map(choice=>`<button class="choice" data-choice="${choice.id}" ${choice.available?'':'disabled'}><strong>${esc(choice.label)}</strong><span>${esc(choice.description)}</span>${choice.available?'':'<em>Not supported in this proof</em>'}</button>`).join('')}</div>`;
+  const recovery=ambiguity.choices.length?'Choose an interpretation before DataGraphs creates the next plan.':ambiguity.id==='provider_unavailable'?'No calculation ran. Try again later; the existing result and history are unchanged.':'No calculation ran. This narrow proof cannot safely answer that question; revise it or use the canonical question.';
+  $('#verify').innerHTML=`<div class="clarification"><div class="eyebrow">${ambiguity.id==='provider_unavailable'?'INTENT UNAVAILABLE':'NEEDS CLARIFICATION'}</div><h2>${esc(ambiguity.prompt)}</h2><p>${recovery}</p>${ambiguity.choices.map(choice=>`<button class="choice" data-choice="${choice.id}" ${choice.available?'':'disabled'}><strong>${esc(choice.label)}</strong><span>${esc(choice.description)}</span>${choice.available?'':'<em>Not supported in this proof</em>'}</button>`).join('')}</div>`;
   document.querySelectorAll('.choice:not(:disabled)').forEach(button=>button.onclick=()=>executeInterpretation(resolveClarification(interpretation,ambiguity.id,button.dataset.choice)));
 }
 
@@ -71,12 +75,18 @@ function resultLabel(revision){return `${state.loadedFromStorage?'STORED HISTORI
 
 function renderPersistenceControls(){
   const owner=state.writeToken||!state.persistedRevisionCount;
-  $('#persistence').innerHTML=`<div class="persistence"><div><strong>${state.persistedRevisionCount===state.dataGraph.revisions.length?'Saved DataGraph':'Unsaved DataGraph'}</strong><span>${state.persistedRevisionCount?'Stable route · public to anyone with the link':'Public-link proof: stores the exact uploaded source and full DataGraph on Cloudflare.'}</span></div>${owner?`<button id="saveGraph" class="quiet">${state.persistedRevisionCount?'Save revision':'Save & share'}</button>`:'<em>Read-only shared view</em>'}</div>`;
-  if(owner)$('#saveGraph').onclick=saveDataGraph;
+  const readOnlyReason='Creator key unavailable in this browser. This public-link DataGraph is read-only here; revisions cannot be saved.';
+  $('#persistence').innerHTML=`<div class="persistence"><div><strong>${state.persistedRevisionCount===state.dataGraph.revisions.length?'Saved DataGraph':'Unsaved DataGraph'}</strong><span>${state.persistedRevisionCount?'Stable route · public to anyone with the link':'Not private: publishing stores the exact CSV and complete DataGraph on Cloudflare.'}</span></div>${owner?`<button id="saveGraph" class="quiet">${state.persistedRevisionCount?'Save revision':'Review & publish'}</button>`:`<em title="${readOnlyReason}">Read-only · creator key unavailable</em>`}</div>`;
+  if(owner)$('#saveGraph').onclick=state.persistedRevisionCount?saveDataGraph:renderPublishConsent;
+}
+
+function renderPublishConsent(){
+  $('#persistence').innerHTML=`<div class="publishConsent"><strong>Publish this exact source?</strong><p>This creates an unlisted public link and stores the complete DataGraph, including the exact uploaded CSV bytes, on Cloudflare. Anyone with the URL can access it. This is not private storage.</p><label><input id="publishConsent" type="checkbox"> I understand this dataset will be accessible to anyone with the link.</label><div><button id="cancelPublish" class="quiet">Cancel</button><button id="confirmPublish" disabled>Publish DataGraph</button></div></div>`;
+  $('#publishConsent').onchange=event=>$('#confirmPublish').disabled=!event.target.checked;$('#cancelPublish').onclick=renderPersistenceControls;$('#confirmPublish').onclick=saveDataGraph;
 }
 
 async function saveDataGraph(){
-  const button=$('#saveGraph');button.disabled=true;button.textContent='Saving…';
+  const button=$('#saveGraph')||$('#confirmPublish');button.disabled=true;button.textContent='Saving…';
   try{
     const creating=!state.persistedRevisionCount,url=creating?'/api/datagraphs':`/api/datagraphs/${encodeURIComponent(state.dataGraph.dataGraphId)}`,headers={'content-type':'application/json'};
     if(!creating)headers.authorization=`Bearer ${state.writeToken}`;
@@ -111,7 +121,7 @@ async function loadSharedRoute(){
     const response=await fetch(`/api/datagraphs/${encodeURIComponent(match[1])}`),body=await response.json();if(!response.ok)throw new Error(body.error||'Shared DataGraph could not be loaded.');
     const dataGraph=deserializeDataGraph(JSON.stringify(body.dataGraph)),validation=await validateDataGraph(dataGraph);if(!validation.valid)throw new Error(`Stored DataGraph failed validation: ${validation.errors.join(' ')}`);
     const text=new TextDecoder('utf-8',{fatal:true}).decode(validation.sourceBytes),rows=parseCsv(text),profile=profileDataset(rows),writeToken=localStorage.getItem(`datagraph:${dataGraph.dataGraphId}:writeToken`);
-    state={sourceBytes:validation.sourceBytes,rows,profile,result:null,name:dataGraph.source.originalFilename,dataGraph,revisions:[],pendingInterpretation:null,persistedRevisionCount:dataGraph.revisions.length,writeToken,loadedFromStorage:true};
+    const compatibility=assessDatasetCompatibility(profile,dataGraph.semantics);state={sourceBytes:validation.sourceBytes,rows,profile,compatibility,result:null,name:dataGraph.source.originalFilename,dataGraph,revisions:[],pendingInterpretation:null,persistedRevisionCount:dataGraph.revisions.length,writeToken,loadedFromStorage:true};
     $('#run').disabled=false;$('#dataset').innerHTML=`<div class="datasetName">${esc(state.name)}</div><div class="stat"><b>${profile.rowCount}</b> rows · <b>${profile.columns.length}</b> columns</div><div class="schema">${profile.columns.map(column=>`<div><span>${esc(column.name)}</span><em>${column.type}</em><small>${column.uniqueCount} unique${column.nullCount?` · ${column.nullCount} blank`:''}</small></div>`).join('')}</div>`;
     state.revisions=dataGraph.revisions.map((storedRevision,index)=>revisionView(dataGraph,storedRevision,index));const revision=state.revisions.at(-1);state.result=revision.output;$('#question').value=revision.question;render(revision.output,revision);
   }catch(error){$('#hero').innerHTML=`<div class="emptyHero"><h1>DataGraph unavailable.</h1><p>${esc(error.message)}</p></div>`;}
