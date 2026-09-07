@@ -2,6 +2,23 @@
 
 Cloudflare Pages project `datagraphs-staging` serves the production branch at `https://datagraphs-staging.pages.dev`. Its `DB` binding targets the `datagraphs-staging` D1 database. Apply migrations with `npx wrangler d1 migrations apply datagraphs-staging --remote` before deploying code that depends on a new migration.
 
+## Founding-proof runtime receipt — 2026-09-07T02:40Z
+
+- Git commit: `fcadb4a` (merged PR #16)
+- Branch: `main`
+- Deploy: `npx wrangler pages deploy dist --project-name datagraphs-staging --branch main --commit-hash <Git SHA> --commit-dirty=false`
+- Wrangler result: Pages assets, Functions, D1, and Workers AI binding deployed at `https://fb24b853.datagraphs-staging.pages.dev`
+- Migration: `npx wrangler d1 migrations apply datagraphs-staging --remote` applied `0002_intent_usage.sql`
+- Upload/profile: a fresh Chromium context uploaded `public/orders.csv`; Studio reported 13 rows and 11 columns
+- Intent boundary: both questions returned HTTP 200 from Workers AI model `@cf/meta/llama-3.3-70b-instruct-fp8-fast` using prompt `datagraph-plan-v1`; Verify retained this provenance
+- Trust proof: the initial proposal passed deterministic compilation/validation before computation; the annual follow-up did not execute until one of three grain interpretations was explicitly confirmed
+- Revision/persistence proof: revision 1 created through API HTTP 201 and revision 2 appended through authenticated HTTP 200
+- Reload/share proof: after closing the creator context, a fresh context loaded the stable route read-only, preserved exact source and result identities, and rendered the stored historical result without recomputation
+- Browser outcome: no page errors
+- Durable DataGraph: `https://datagraphs-staging.pages.dev/g/dg_a9ece9eb-b90e-402b-ba92-39be3d4f01ee`
+- Visual receipt: `artifacts/founding-proof.png`
+- Conclusion: the exact merged release passes the repository definition of one perfect canonical DataGraph; it is not yet a private, authenticated, general-purpose MVP
+
 ## Runtime receipt — 2026-09-07T02:02Z
 
 - Git commit: `1f3f19f` (merged PR #14, following persistence PR #13 at `72508c8`)
