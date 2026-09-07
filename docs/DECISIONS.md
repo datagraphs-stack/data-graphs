@@ -31,3 +31,7 @@
 ## ADR-008 — Verify renders a normalized deterministic execution trace
 
 **Accepted 2026-09-07.** Successful execution emits an immutable, versioned trace containing source and semantic identities, ordered operations, validated operation inputs, meaningful row counts, warnings, plan version, engine version, and final row count. Verify renders these trace facts rather than maintaining a separate description of canonical calculations. Invalid or unresolved intent never produces an execution trace.
+
+## ADR-009 — DataGraph entity IDs and content identities are distinct
+
+**Accepted 2026-09-07.** DataGraphs and revisions have non-content entity IDs so one address or event remains distinct from its content. Exact source bytes, source profile, semantic context, result rows, and revision content use SHA-256 identities over bytes or canonical JSON. Revision content identity binds its parent content hash, source, semantics, interpretation, validated plan, execution trace, result, visualization, and warnings while entity IDs and creation time remain non-authoritative metadata. The source artifact is retained as base64 in the versioned envelope for the narrow proof; persistence architecture must measure the actual envelope before choosing D1, R2, or a split.
