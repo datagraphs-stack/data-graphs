@@ -39,3 +39,7 @@
 ## ADR-010 — The founding share proof stores the complete envelope in D1
 
 **Accepted 2026-09-07.** The measured two-revision canonical DataGraph is 11,752 bytes including its 1,137-byte source, so the first persistence boundary stores one validated JSON envelope per DataGraph in D1. R2 is deferred until measured source or envelope size justifies separate object custody. Reads are public to anyone holding the unlisted entity URL; exact source bytes are therefore public to link recipients and this is disclosed before save. A random write token is returned only on creation, stored as a SHA-256 hash in D1, retained locally by the creator, and required to append immutable revision history or delete the object. Historical loads render stored results; recomputation remains an explicit later action.
+
+## ADR-011 — Models propose bounded intent slots; deterministic code compiles plans
+
+**Accepted 2026-09-07.** Workers AI receives the question, conservative structure, declared semantics, and prior revision context, but no source rows. It proposes a small versioned set of analytical intent slots and never results, SQL, or code. Deterministic code rejects extra fields, compiles supported slots into an AnalysisPlan, performs structural and semantic validation, and blocks material comparison-grain ambiguity before execution. Provider/model/prompt metadata and the proposal are provenance. Provider errors fail closed. A D1-backed global hourly staging budget limits inference spend without pretending to be production authentication or per-user abuse control.
