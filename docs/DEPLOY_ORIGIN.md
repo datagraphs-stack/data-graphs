@@ -1,6 +1,8 @@
 # Deployment origin
 
-Cloudflare Pages project `datagraphs-staging` serves the production branch at `https://datagraphs-staging.pages.dev`. Its `DB` binding targets the `datagraphs-staging` D1 database. Apply migrations with `npx wrangler d1 migrations apply datagraphs-staging --remote` before deploying code that depends on a new migration.
+Cloudflare Pages project `datagraphs-staging` serves the staging application at `https://staging.datagraphs.ai` (and its fallback `https://datagraphs-staging.pages.dev`). Its `DB` binding targets the `datagraphs-staging` D1 database. Apply migrations with `npx wrangler d1 migrations apply datagraphs-staging --remote` before deploying code that depends on a new migration.
+
+Cloudflare Pages project `datagraphs` serves production at `https://datagraphs.ai` and `https://app.datagraphs.ai` (with fallback `https://datagraphs.pages.dev`). Its `DB` binding targets the isolated `datagraphs-production` D1 database. Production commands must pass `--config wrangler.production.jsonc`; apply migrations with `npx wrangler d1 migrations apply datagraphs-production --remote --config wrangler.production.jsonc` before deploying dependent code. The apex and `app` hostnames intentionally serve the same production deployment; no canonical-host redirect is asserted yet.
 
 ## External-hardening runtime receipt — 2026-09-07T03:03Z
 

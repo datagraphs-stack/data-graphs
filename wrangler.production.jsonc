@@ -1,0 +1,10 @@
+{
+  "name": "datagraphs",
+  "compatibility_date": "2026-09-07",
+  "compatibility_flags": ["nodejs_compat"],
+  "pages_build_output_dir": "dist",
+  "ai": { "binding": "AI" },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "datagraphs-production", "database_id": "a6323069-1257-4a1d-91b5-c4e0e2420c01" }
+  ]
+}
