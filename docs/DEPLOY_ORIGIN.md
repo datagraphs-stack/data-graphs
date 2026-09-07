@@ -4,7 +4,17 @@ Cloudflare Pages project `datagraphs-staging` serves the production branch at `h
 
 
 
-## Runtime receipt — 2026-09-07T00:56:31Z
+
+## Runtime receipt — 2026-09-07T01:03:37Z
+
+- Git commit: `665530139c0909ca1ffc1994922d1645c158bfbb`
+- Branch: `main`
+- Deploy: `npx wrangler pages deploy dist --project-name datagraphs-staging --branch main --commit-hash <Git SHA> --commit-message "Create versioned DataGraph envelope and identities"`
+- Wrangler result: eleven assets present; deployment completed at `https://a0203c8f.datagraphs-staging.pages.dev`
+- HTTP smoke: `/`, `/src/datagraph.js`, and `/src/identity.js` returned 200
+- Browser smoke: source identity remained stable across two revisions; revision identities were distinct; revision 2 linked to revision 1; result SHA-256 was visible; no page errors
+
+## Prior runtime receipt — 2026-09-07T00:56:31Z
 
 - Git commit: `1bf54cc5db75a5b5da7c4dce7b56728f63d03ca2`
 - Branch: `main`
