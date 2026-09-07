@@ -1,5 +1,7 @@
 {
   "name": "datagraphs-staging",
+  "compatibility_date": "2026-09-07",
+  "compatibility_flags": ["nodejs_compat"],
   "pages_build_output_dir": "dist",
   "d1_databases": [
     { "binding": "DB", "database_name": "datagraphs-staging", "database_id": "462583ab-a056-4fe0-a5fb-aa379ddaa77a" }
