@@ -35,3 +35,7 @@
 ## ADR-009 — DataGraph entity IDs and content identities are distinct
 
 **Accepted 2026-09-07.** DataGraphs and revisions have non-content entity IDs so one address or event remains distinct from its content. Exact source bytes, source profile, semantic context, result rows, and revision content use SHA-256 identities over bytes or canonical JSON. Revision content identity binds its parent content hash, source, semantics, interpretation, validated plan, execution trace, result, visualization, and warnings while entity IDs and creation time remain non-authoritative metadata. The source artifact is retained as base64 in the versioned envelope for the narrow proof; persistence architecture must measure the actual envelope before choosing D1, R2, or a split.
+
+## ADR-010 — The founding share proof stores the complete envelope in D1
+
+**Accepted 2026-09-07.** The measured two-revision canonical DataGraph is 11,752 bytes including its 1,137-byte source, so the first persistence boundary stores one validated JSON envelope per DataGraph in D1. R2 is deferred until measured source or envelope size justifies separate object custody. Reads are public to anyone holding the unlisted entity URL; exact source bytes are therefore public to link recipients and this is disclosed before save. A random write token is returned only on creation, stored as a SHA-256 hash in D1, retained locally by the creator, and required to append immutable revision history or delete the object. Historical loads render stored results; recomputation remains an explicit later action.
