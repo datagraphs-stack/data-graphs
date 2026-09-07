@@ -11,10 +11,8 @@ const comparisonChoices=Object.freeze([
 
 export function createModelIntentProvider({fetchImpl=fetch}={}){
   return {id:'cloudflare-workers-ai',version:'1',async propose(input){
-    const response=await fetchImpl('/api/intent',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(intentRequest(input))});
-    let body;try{body=await response.json();}catch{body={};}
-    if(!response.ok)return unavailableInterpretation(input.question,body.error||'The intent provider is unavailable.');
-    return interpretCandidate({...input,candidate:body.candidate,provider:body.provider});
+    try{const response=await fetchImpl('/api/intent',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(intentRequest(input))});let body;try{body=await response.json();}catch{body={};}if(!response.ok)return unavailableInterpretation(input.question,body.error||'The intent provider is unavailable.',{id:this.id,version:this.version},{},'provider_unavailable');return interpretCandidate({...input,candidate:body.candidate,provider:body.provider});}
+    catch{return unavailableInterpretation(input.question,'The intent provider could not be reached. Try again later.',{id:this.id,version:this.version},{},'provider_unavailable');}
   }};
 }
 
@@ -48,7 +46,7 @@ export function compileIntentProposal(intent,profile,semantics){
   plan.ranking={dimension:'region',by:`${metric.aggregation}_${metric.sourceField}`,limit:3,period:'latest'};plan.comparison={periodDimension:`${metric.timeField}_year`,offset:'previous_year'};return plan;
 }
 
-function unavailableInterpretation(question,reason,provider={id:'cloudflare-workers-ai',version:'1'},context={}){return {status:InterpretationStatus.NEEDS_CLARIFICATION,provider,question,context,ambiguities:[{id:'unsupported_intent',prompt:reason,material:true,choices:[]}]};}
+function unavailableInterpretation(question,reason,provider={id:'cloudflare-workers-ai',version:'1'},context={},id='unsupported_intent'){return {status:InterpretationStatus.NEEDS_CLARIFICATION,provider,question,context,ambiguities:[{id,prompt:reason,material:true,choices:[]}]};}
 function intentRequest({question,profile,semantics,previousRevision}){return {question,profile:{rowCount:profile?.rowCount,columns:(profile?.columns||[]).map(({name,type,nullCount})=>({name,type,nullCount}))},semantics,previousRevision:previousRevision?{question:previousRevision.question,plan:previousRevision.plan}:null};}
 
 /** Deterministic fixture adapter only; production Studio uses createModelIntentProvider. */
