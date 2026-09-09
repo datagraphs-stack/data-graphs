@@ -1,35 +1,30 @@
 # Project state — September 9, 2026 founding reset
 
-## Direction and active work
+## Direction and repository record
 
-DataGraphs is an internet data foundry and graph intelligence platform. The active target is one perfect 100-company Market Graph, not the CSV MVP. Full Owner commissions are in `commission/`; old records remain unmodified in `history/`. ADR-013 supersedes the former company strategy while preserving Studio as the Lab.
+DataGraphs is an **internet data foundry and graph intelligence platform**. The target is **one perfect 100-company Market Graph**, not the CSV MVP. Full Owner commissions are in `commission/`; original historical records remain unmodified in `history/`. ADR-013 supersedes the former company strategy while preserving Studio as the Lab.
 
-This campaign is on `build/foundry-reset-2026-09-09`, based on main `979b64eb1a21bd5a43c7ee5ae9dbc92838de80e5`. Integration status and exact CI receipts must be refreshed after review/merge.
+Change record: **PR #26**, `build/foundry-reset-2026-09-09`, based on main `979b64eb1a21bd5a43c7ee5ae9dbc92838de80e5`. Feature revision: `94f05457c79f6b7bc6b3ce6f2951952407ef4e1a`. Git and the PR are the authority for merge/current-HEAD status. This record update changes documentation only. Detailed proof: `reports/FOUNDRY_RESET_2026-09-09.md`.
 
-## Built in this campaign
+## What is built and proven
 
-- Canonical reset, full source commissions, operating directive, dependency roadmap, architecture and explicit strategy supersession.
-- Foundry homepage artifact and preserved `/lab/` plus `/g/*` Studio routes; no production deployment made.
-- D1-compatible source registry: stable origin identities, idempotent registration, policy audit, due selection, atomic leases and stale-holder protection. Mission validation is bounded and fail-closed. Additive migration `0003_foundry_registry.sql` is **not applied remotely**.
-- Local SQLite development adapter/CLI. Sources default to pending. No public write/crawl API or network fetch loop exists.
-- Automatic GitHub CI with pinned actions, read-only permissions, tests, syntax checks and build; no secrets or deploy step.
+- Canonical reset, preserved full commissions, autonomous operating directive, dependency roadmap, architecture and explicit strategy supersession.
+- Foundry homepage artifact; Studio preserved at `/lab/` with existing `/g/*` share routing. Existing Studio engine, API functions, data and deployment configurations were not changed.
+- D1-compatible source registry: stable origin identities, idempotent registration, policy history, due selection, atomic leases and stale/revoked-holder protection. Bounded mission validation, additive migration `0003_foundry_registry.sql` and local-only SQLite CLI are implemented. Sources default to pending. No public write API or network acquisition exists.
+- GitHub CI automatically runs tests, syntax checks and build using pinned actions and read-only permissions. No deployment step, secrets, schedule or code-generation agent is installed.
 
-## Proof and non-proof
+**Full repository verification:** GitHub PR run `34415364723`, job `102678930823`, tested PR merge candidate `c1910bbdb35a1c5006653371ba7b7e3df8fefacf` for feature `94f0545` against base `979b64e`: **68 tests passed, 0 failed; 26 JavaScript modules syntax-checked; build passed**. This includes 36 new focused tests. Local CLI validation, two pending fixture-source registrations and read-only reopen succeeded. Offline Chromium desktop/mobile homepage rendering had no page errors or mobile horizontal overflow; HTTP browser navigation returned `ERR_BLOCKED_BY_ADMINISTRATOR` and is not verified. Review was self-review, not independent review.
 
-36 focused local tests pass, covering source/mission policy, persistence after reopen, SQL rollback, scheduling, stale/revoked leases and static Lab/share routing. Baseline GitHub run `34414148738` for `c9b0f0f` passed the pre-existing suite, syntax and build. Full-campaign CI and merged-state evidence are pending at this draft state. The local CLI successfully validated a fixture mission, registered two pending fixture sources and reopened them read-only; no websites were contacted. Offline Chromium rendering of the authored homepage passed desktop/mobile layout checks with no page errors or mobile horizontal overflow; HTTP browser navigation was not verified because the local URL returned `ERR_BLOCKED_BY_ADMINISTRATOR`.
+## What is not deployed or proven
 
-Existing Studio engine, API functions and data are preserved. Historical last deployed runtime is recorded in `DEPLOY_ORIGIN.md` (`fec07f5`; production `93111df8`, staging `bd351d20`). Those are historical receipts, not new Cloudflare reads in this session. The old CSV founding proof does not satisfy the reset MVP.
+No Cloudflare migration or deployment was made. Historical last deployed code remains the record in `DEPLOY_ORIGIN.md` (`fec07f5`; production `93111df8`, staging `bd351d20`), not a newly verified runtime. The new homepage is a tested artifact, not a claim about the live website. The local SQLite adapter does not establish live D1 compatibility.
 
-No real company pages were acquired in this campaign; no R2 snapshots, graph entities or real change events were produced; no live Market Graph, scheduled crawler or unattended coding agent was installed. CI validates commits only.
+No real company pages, R2 snapshots, graph entities or real change events were produced. The 100-company Market Graph, scheduled crawling and an unattended coding agent are not built. CI validates commits only. Phase 0 is reconciled in this revision; Phase 1 has a working local registry slice but is not proven on Cloudflare or real company domains. The old CSV proof does not satisfy the reset MVP.
 
-## Exact current blocker
+## Exact blocker and next dependency
 
-Cloudflare — DataGraphs `search` and a read-only `execute` of GET Pages project `datagraphs-staging` both returned **`FORBIDDEN: This conversation does not support developer MCPs`** before an API response. This is a conversation/tool-runtime rejection, not a Cloudflare credential rejection. No write, deployment, D1 mutation, DNS change, secret change or paid service was attempted through an alternate route.
+Cloudflare — DataGraphs OpenAPI `search` and a read-only `execute` GET of Pages project `datagraphs-staging` both returned **`FORBIDDEN: This conversation does not support developer MCPs`** before any Cloudflare API response. This is a conversation/tool-runtime rejection, not an established credential problem. No missing secret was demonstrated. No alternate route was used to bypass the rejection.
 
-Required changed condition: a supported session/connector execution route that can actually invoke the existing Cloudflare connection. Do not repeatedly retry the same blocked call without new evidence or claim regranting account permissions is proven necessary. No missing secret has been established.
+Required changed condition: a session/connector execution route that supports the existing Cloudflare connection. Do not repeatedly retry unchanged calls or assert that regranting permissions is proven necessary.
 
-## Exact next dependency
-
-Finish review/integration and record full CI. Once Cloudflare execution is available, perform bounded staging read/write/cleanup and deployment verification, then apply the reviewed additive registry migration to staging only and inspect registered real source origins. Phase 1 is implemented locally but is not runtime-proven on D1.
-
-Independent work may continue on crawler fixtures and bounded robots/source-policy, DNS/redirect, byte/time/rate/budget and archive contracts without another routine Owner approval. Do not begin a live crawl with only hostname syntax validation. Phase 2 real proof requires five approved public company domains and actual evidence custody. Production, secrets, paid providers, destructive migrations and broad acquisition remain outside this campaign.
+Next runtime dependency: bounded staging read/write/cleanup and deployment verification; then apply the reviewed additive registry migration to staging only and inspect approved real source origins. Independent work may continue on bounded crawler fixtures and robots/source-policy, DNS/redirect, byte/time/rate/budget and archive contracts. URL syntax validation alone is not SSRF protection. The first real acquisition proof requires five approved public company domains and evidence custody. Production, DNS, paid services, secrets, destructive mutations and broad acquisition remain outside this campaign.
