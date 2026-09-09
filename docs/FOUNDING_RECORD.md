@@ -1,31 +1,29 @@
-# Founding record
+# Founding record — September 9, 2026 reset
 
-## Commission — 2026-09-06
+**Accepted by Owner commission.** The full founding reset and business blueprint is preserved in `commission/FOUNDING_RESET_2026-09-09.md`; the full autonomous-agent commission is in `commission/AUTONOMOUS_BUILD_2026-09-09.md`. This record implements them; they are not speculative assistant suggestions.
 
-DataGraphs.ai is commissioned to become **the trusted computation layer between raw data and decisions**. A DataGraph is a versioned executable analytical object connecting source data → structure → semantics → transformations → metrics → results → visualizations → claims → evidence. It intentionally means both the graph *of* data and useful graphs *from* data.
+DataGraphs.ai is an **INTERNET DATA FOUNDRY AND GRAPH INTELLIGENCE PLATFORM**. It continuously acquires useful public internet data, preserves evidence, extracts structured observations and claims, resolves durable identities, builds temporal relationships, monitors change and supplies reusable intelligence assets to products, APIs, datasets and future businesses.
 
-The operating doctrine is **think big; build narrow; prove the loop; expand from evidence**. The trust architecture is source → semantics → computation → evidence → presentation. AI may propose intent; validated deterministic systems alone establish authoritative analytical values. Unknown and ambiguity remain explicit.
+**DISCOVER → ACQUIRE → ARCHIVE → EXTRACT → RESOLVE → GRAPH → MONITOR → SIGNAL → PRODUCT.**
 
-## Bounded market map
+A DataGraph is a versioned intelligence object, not a chart, CSV, table, conversation or graph visualization. Its enduring value is connected identities, evidence and history. AI is an accelerator, not evidence. Deterministic computations and reconstruction paths survive from the existing implementation.
 
-Research on 2026-09-06 examined the public positioning of representative categories: ThoughtSpot and Power BI (AI/conversational BI), Hex and notebooks (AI-assisted analysis), spreadsheet AI, Tableau (visualization), dbt Semantic Layer/MetricFlow and Cube (metrics), Atlan/OpenLineage (catalog/lineage), and emerging agent/MCP data interfaces. Direct source retrieval from this environment returned HTTP 403, so these are directional observations to revalidate—not a frozen competitive dossier.
+## Supersession
 
-The market increasingly makes question-to-query, chart construction, notebook generation, and dashboard authoring fast. Metric layers improve consistency but demand up-front modeling; catalogs and lineage improve discovery/governance but often sit beside the end-user answer; conversational tools can hide interpretation and query details; spreadsheets are accessible but calculations and versions drift. The unresolved seam is an approachable answer whose intent, computation, semantics, and evidence remain one durable object.
+The September 6 commerce-CSV founding customer, wedge, company definition and corresponding roadmap are superseded by ADR-013 (`decisions/013-founding-reset.md`). Unmodified prior records are retained in `history/`. Earlier architecture decisions remain valid within the Lab where compatible; they do not constrain the foundry to browser computation or D1-only source custody.
 
-## Founding customer and wedge
+**Do not delete Studio. Do not let it define the company.** It is now DataGraph Studio / Lab: demonstration, future bring-your-own-data interface, analysis workbench and internal debugging surface. The new homepage describes the foundry; old Studio share routes must remain functional.
 
-The first customer is a founder or operator at a small, spreadsheet-heavy commerce business who has CSV data, needs recurring answers, does not want a BI implementation, and values correctness enough to inspect it. Their painful job is not drawing a chart; it is confidently answering a business question and explaining the answer later.
+## First proving graph and business
 
-DataGraphs' wedge is **upload → ask → deterministically compute → graph → verify → revise → share**, starting with one commerce CSV. Differentiation is evidence as part of the answer, a constrained inspectable plan, conservative semantics, and a persistent analytical object rather than a disposable chat response.
+Build **one perfect 100-company Market Graph**, initially from public first-party sources in a bounded technology/business market. A technology/data/AI infrastructure market is a reasonable candidate, not a validated final market selection. Capture supported company identity, websites, aliases, locations, products, categories, pricing pages, documentation, announcements, careers, leadership and partnerships with provenance and history. Do not depend on social-network scraping, protected sources or sensitive profiles.
 
-## Destination, proof, and economics
+Market Graph is the first commercial surface. The free market map and paid monitoring, history, alerts, comparisons, exports, saved views and eventual APIs are packaging hypotheses. Exact pricing and demand remain unvalidated. Vertical intelligence is the preferred early revenue path; APIs, feeds/datasets, managed DataGraph builds and internal portfolio infrastructure are additional business models.
 
-The destination connects Studio, Engine, Semantic Layer, Provenance Graph, Signals, and governed interfaces for agents. Expansion is earned only by the first perfect DataGraph: the canonical orders CSV, monthly net revenue by region excluding cancelled orders, a top-three/year comparison revision, exact values, visible evidence, lineage, and stable reload/share.
+## MVP and destination
 
-Plausible economics are a usage-limited free entry; a Pro tier for private/larger/persistent work; Team for shared definitions, permissions, and connectors; and Business/Enterprise for governance, SSO, API/MCP, embedding, and deployment options. Alternatives include compute/refresh usage pricing or workspace-plus-usage. Pricing is an untested hypothesis; billing is explicitly deferred.
+The MVP requires autonomous bounded acquisition, archived snapshots, useful observations, durable entities, relationships, repeatable identity/history, meaningful events/signals, a public graph-consuming interface and evidence for every material displayed claim. It must be valuable without a file upload. The old CSV proof is a useful Lab achievement, **not completion of this MVP**.
 
-## Risks and non-goals
+Eventually a bounded intelligence mission should drive discovery, acquisition, evidence, extraction, resolution, graph compilation, monitoring, signals and delivery. Think at internet scale; prove narrowly; expand only with measured quality, cost and demand.
 
-Technical risks: conservative CSV inference, decimal/date correctness, safely mapping language to plans, reproducibility as data changes, browser/runtime scale, and provenance that matches execution. Business risks: incumbents absorb verification UX, trust value is insufficient to prompt switching, setup is still too semantic-heavy, and a CSV wedge attracts low-retention users.
-
-This is not a generic chatbot, arbitrary text-to-SQL wrapper, graph database, dashboard clone, catalog, connector collection, or premature enterprise governance system. Founding history changes only through an explicit accepted decision.
+**Think at internet scale. Build one graph at a time. Preserve the evidence. Resolve identity carefully. Track time. Turn changes into signals. Turn graphs into businesses.**
