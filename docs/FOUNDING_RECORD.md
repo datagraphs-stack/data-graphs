@@ -1,31 +1,31 @@
 # Founding record
 
-## Commission — 2026-09-06
+## Founder correction — 9 September 2026
 
-DataGraphs.ai is commissioned to become **the trusted computation layer between raw data and decisions**. A DataGraph is a versioned executable analytical object connecting source data → structure → semantics → transformations → metrics → results → visualizations → claims → evidence. It intentionally means both the graph *of* data and useful graphs *from* data.
+The founder explicitly rejected the CSV-upload analytics business and restated the purpose of purchasing datagraphs.ai: crawl internet data, turn it into graphs, and use those graphs to power intelligence products. The existing CSV application may remain as a sample while the real data-graph system is built.
 
-The operating doctrine is **think big; build narrow; prove the loop; expand from evidence**. The trust architecture is source → semantics → computation → evidence → presentation. AI may propose intent; validated deterministic systems alone establish authoritative analytical values. Unknown and ambiguity remain explicit.
+This correction supersedes the CSV-first customer, product, milestone, and economics recorded on 6 September. It is not permission to rewrite history or claim that the original repository already specified the desired crawler. The exact previous founding record is preserved at `history/pre-reset-2026-09-09/FOUNDING_RECORD.md`.
 
-## Bounded market map
+## Current commission
 
-Research on 2026-09-06 examined the public positioning of representative categories: ThoughtSpot and Power BI (AI/conversational BI), Hex and notebooks (AI-assisted analysis), spreadsheet AI, Tableau (visualization), dbt Semantic Layer/MetricFlow and Cube (metrics), Atlan/OpenLineage (catalog/lineage), and emerging agent/MCP data interfaces. Direct source retrieval from this environment returned HTTP 403, so these are directional observations to revalidate—not a frozen competitive dossier.
+**DataGraphs builds and maintains evidence-backed knowledge graphs from permitted internet sources, then uses those graphs to power useful intelligence products for businesses and software.**
 
-The market increasingly makes question-to-query, chart construction, notebook generation, and dashboard authoring fast. Metric layers improve consistency but demand up-front modeling; catalogs and lineage improve discovery/governance but often sit beside the end-user answer; conversational tools can hide interpretation and query details; spreadsheets are accessible but calculations and versions drift. The unresolved seam is an approachable answer whose intent, computation, semantics, and evidence remain one durable object.
+The owned asset is the maintained collection pipeline, structured observations, entity identities, relationships, evidence, change history, and delivery systems. Access to third-party content and any redistribution remain subject to the relevant source rights; owning the pipeline is not owning all underlying source material.
 
-## Founding customer and wedge
+A data graph connects real-world entities, typed relationships, observations, events, and supporting sources over time. It is not merely a plot or the lineage of a single uploaded spreadsheet. Analytical provenance remains valuable as a supporting capability.
 
-The first customer is a founder or operator at a small, spreadsheet-heavy commerce business who has CSV data, needs recurring answers, does not want a BI implementation, and values correctness enough to inspect it. Their painful job is not drawing a chart; it is confidently answering a business question and explaining the answer later.
+## Business intent
 
-DataGraphs' wedge is **upload → ask → deterministically compute → graph → verify → revise → share**, starting with one commerce CSV. Differentiation is evidence as part of the answer, a constrained inspectable plan, conservative semantics, and a persistent analytical object rather than a disposable chat response.
+Build a shared data engine that can serve multiple intelligence products. Sell a recurring outcome: relevant opportunities, competitor changes, supplier/product discovery, market evidence, or governed data access. These are candidate product families, not validated demand or accepted market selections.
 
-## Destination, proof, and economics
+Start with a bounded collection domain and one testable buyer decision to learn cheaply. That pilot limits initial coverage, not the company's long-term purpose. Do not postpone the actual crawler until a CSV SaaS earns permission to exist. Do not build an indiscriminate whole-web archive before demonstrating useful output and measured costs.
 
-The destination connects Studio, Engine, Semantic Layer, Provenance Graph, Signals, and governed interfaces for agents. Expansion is earned only by the first perfect DataGraph: the canonical orders CSV, monthly net revenue by region excluding cancelled orders, a top-three/year comparison revision, exact values, visible evidence, lineage, and stable reload/share.
+## Constraints carried forward
 
-Plausible economics are a usage-limited free entry; a Pro tier for private/larger/persistent work; Team for shared definitions, permissions, and connectors; and Business/Enterprise for governance, SSO, API/MCP, embedding, and deployment options. Alternatives include compute/refresh usage pricing or workspace-plus-usage. Pricing is an untested hypothesis; billing is explicitly deferred.
+Keep spending within the small explicitly approved Cloudflare baseline; use owned code, suitable open-source software, and authorized no-cost sources. Do not assume paid external crawlers, data vendors, automation subscriptions, databases, or separate AI services. Expansion should be supported by customer evidence and revenue. Domain renewal cost and customer willingness to pay are not verified here.
 
-## Risks and non-goals
+Preserve useful existing code and the demo. A strategic restart does not authorize deleting customer objects, repositories, infrastructure, or deployment history.
 
-Technical risks: conservative CSV inference, decimal/date correctness, safely mapping language to plans, reproducibility as data changes, browser/runtime scale, and provenance that matches execution. Business risks: incumbents absorb verification UX, trust value is insufficient to prompt switching, setup is still too semantic-heavy, and a CSV wedge attracts low-retention users.
+## New founding proof
 
-This is not a generic chatbot, arbitrary text-to-SQL wrapper, graph database, dashboard clone, catalog, connector collection, or premature enterprise governance system. Founding history changes only through an explicit accepted decision.
+Acquire permitted public-source material; retain provenance; extract and validate observations; link records across sources without hiding uncertain matches; create inspectable graph relationships; recrawl and identify a genuine change; deliver an evidence-backed intelligence item useful to a specific buyer. Technical completion and willingness to pay must be demonstrated separately.
