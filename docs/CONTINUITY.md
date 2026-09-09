@@ -1,9 +1,11 @@
-# Continuity
+# Continuity after the founding reset
 
-## Cold-start order
+Read `AGENTS.md` → `docs/FOUNDING_RECORD.md` → `docs/PRODUCT_VISION.md` → `docs/AUTONOMOUS_BUILD_DIRECTIVE.md` → `docs/decisions/013-founding-reset.md` and relevant earlier ADRs → `docs/ROADMAP.md` → `docs/PROJECT_STATE.md` → `docs/architecture/FOUNDRY.md` → actual Git/workflow/deployment evidence. Full Owner commissions are in `docs/commission/`.
 
-1. `AGENTS.md`; 2. `docs/FOUNDING_RECORD.md`; 3. `docs/PRODUCT_VISION.md`; 4. `docs/DECISIONS.md`; 5. `docs/ROADMAP.md`; 6. `docs/PROJECT_STATE.md`; 7. `docs/architecture/FIRST_VERTICAL.md`; 8. inspect worktree, Git log, tests, and any runtime receipt; 9. `docs/DEPLOY_ORIGIN.md`.
+Founding truth: explicit Owner commission, canonical founding/vision and accepted decisions. Runtime truth: source code, Git state, actual executed/deployed receipts, then PROJECT_STATE. History in `docs/history/`, earlier CSV-first roadmap text and past assistant interpretations must not supersede the September 9 reset.
 
-Present implementation truth ranks: worktree, Git, deployed runtime, PROJECT_STATE, current architecture docs, historical reports, remembered conversation. Founding truth ranks: commission, FOUNDING_RECORD, PRODUCT_VISION, accepted decisions, ROADMAP.
+Run `npm test && npm run check && npm run build`. The preserved Studio and engine still require regression tests. New foundry work must validate provenance, bounded acquisition and conservative identity—not merely add a plan or a homepage claim. Inspect `docs/DEPLOY_ORIGIN.md` for historical deployment identities; do not report them as newly verified deployments.
 
-The next agent should run `npm test && npm run check && npm run build`, load `public/orders.csv`, compare UI results to `test/engine.test.js`, and follow the active dependency sequence in `PROJECT_STATE`. Update PROJECT_STATE, not founding history, when reality changes. A change drifts if it bypasses validation/deterministic computation, obscures ambiguity/evidence, persists unresolved material semantics, or builds an unearned later platform surface.
+The current source registry performs no network acquisition. Do not wire a fetch loop to it until robots/source policy, request budgets, redirect validation, public-address/DNS protections, response limits, timeouts and evidence storage exist. URL syntax validation alone is not SSRF protection.
+
+Record the next exact dependency and continue normal authorized engineering within the active session. Automatic CI does not mean an unattended coding agent or crawler is running.
